@@ -1,0 +1,36 @@
+name: Publish npm package
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - '.babelrc'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'webpack.config.js'
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20.16'  # Use the appropriate Node.js version
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build
+      run: npm run build  # If you have a build step
+
+    - name: Publish
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
